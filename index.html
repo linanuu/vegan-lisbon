@@ -319,12 +319,17 @@
       <p class="eyebrow">A field guide</p>
       <h1>Lisbon, <em>plant&#8209;powered</em></h1>
       <p class="sub">Every vegan-friendly stop worth the walk — tagged by how vegan it really is, from all-in kitchens to the one-dish wonders.</p>
-      <p class="count-line"><span id="visible-count">27</span> of 27 spots shown</p>
+      <p class="count-line"><span id="visible-count">0</span> of <span id="total-count">0</span> spots shown</p>
     </div>
 
     <div class="controls">
       <div class="search-wrap">
         <input id="search" type="text" placeholder="Search by name or dish…" />
+      </div>
+
+      <div class="group">
+        <p class="group-title">Type</p>
+        <div class="chip-row" id="type-chips"></div>
       </div>
 
       <div class="group">
@@ -354,33 +359,46 @@
    3 not vegan but a good amount · 2 less than 3 options · 1 only 1 vegan option
    ============================================================ */
 const PLACES = [
-  {name:"Veganeats Caffe", lat:38.731640, lng:-9.133324, price:"Very cheap", priceTier:1, cuisine:["Breakfast","Lunch","Sandwiches","Sausages"], score:5, notes:"No dinner", address:"R. Cavaleiro de Oliveira 42, 1170-088 Lisboa"},
-  {name:"The Green Affair Saldanha", lat:38.735315, lng:-9.144518, price:"Normal", priceTier:2, cuisine:["Burgers","Bowls","Pasta","Ribs"], score:5, notes:"", address:"Av. Duque de Ávila 30 A, 1000-141 Lisboa"},
-  {name:"O Jardim da Jujé", lat:38.730745, lng:-9.140177, price:"Cheap", priceTier:1, cuisine:["Breakfast","Coffee","Smoothie","Quiche","Pastry"], score:5, notes:"No dinner", address:"R. Alexandre Braga 26C, 1150-004 Lisboa"},
-  {name:"Gal Café", lat:38.725950, lng:-9.134076, price:"Cheap", priceTier:1, cuisine:["Breakfast","Tofu scramble","Banoffee cake","Sandwiches","Burgers"], score:5, notes:"No dinner", address:"Rua do Forno do Tijolo 54A, 1170-172 Lisboa"},
-  {name:"Moko Vegan Bakery", lat:38.734258, lng:-9.150820, price:"Very cheap", priceTier:1, cuisine:["Pastry","Empanadas","Sandwich"], score:5, notes:"No dinner", address:"R. Pinheiro Chagas 69B, 1050-137 Lisboa"},
-  {name:"Alfarroba", lat:38.731695, lng:-9.148818, price:"Cheap", priceTier:1, cuisine:["Burger","Cakes","Dish of the day"], score:3, notes:"No dinner", address:"R. Tomás Ribeiro 28, 1050-227 Lisboa"},
-  {name:"Legumi Sushi Vegan", lat:38.708631, lng:-9.155649, price:"Expensive", priceTier:4, cuisine:["Sushi","Asian starters","Asian food"], score:5, notes:"", address:"R. Vicente Borga 75, 1200-863 Lisboa"},
-  {name:"Honest Greens", lat:38.710221, lng:-9.140397, price:"Cheap", priceTier:1, cuisine:["Toast","Bowls","Desserts","Protein bowls","Plates"], score:3, notes:"Multiple locations around the city", address:"R. Ivens 44, 1200-445 Lisboa"},
-  {name:"Kong — food made with compassion", lat:38.707424, lng:-9.142361, price:"Normal–Pricey", priceTier:3, cuisine:["Seafood","Portuguese food"], score:5, notes:"Looks very nice; a bit fancy", address:"Rua do Corpo Santo 2, 1200-129 Lisboa"},
-  {name:"Ao 26", lat:38.710231, lng:-9.143997, price:"Normal–Pricey", priceTier:3, cuisine:["Portuguese food","Fish","Steak"], score:5, notes:"Looks very nice", address:"R. da Horta Seca 5, 1200-213 Lisboa"},
-  {name:"Vegan Nata Chiado", lat:38.711055, lng:-9.143043, price:"Very cheap", priceTier:1, cuisine:["Pastel de nata","Portuguese food"], score:5, notes:"", address:"R. da Misericórdia 9, 1200-208 Lisboa"},
-  {name:"Organi Chiado", lat:38.710297, lng:-9.139716, price:"Normal", priceTier:2, cuisine:["Burger","Pasta","Lasagna","Chana masala","Vegan cheese cuts","Nachos"], score:5, notes:"They have everything", address:"Calçada Nova de São Francisco 2, 1200-300 Lisboa"},
-  {name:"The Botanical Den", lat:38.713318, lng:-9.145168, price:"Normal", priceTier:2, cuisine:["Hot dogs","Burgers"], score:5, notes:"Cocktail bar with food", address:"R. da Atalaia 153, 1200-039 Lisboa"},
-  {name:"Vegan Buffet", lat:38.711446, lng:-9.140309, price:"Normal", priceTier:2, cuisine:["Buffet"], score:5, notes:"All-you-can-eat, they have everything", address:"Calçada do Sacramento 36, 1200-394 Lisboa"},
-  {name:"Plant Base", lat:38.712449, lng:-9.141519, price:"Normal", priceTier:2, cuisine:["Pizza","Burgers","Nachos","Mac n cheese"], score:5, notes:"", address:"R. da Oliveira ao Carmo 9, 1200-307 Lisboa"},
-  {name:"If If If", lat:38.719950, lng:-9.151112, price:"Normal", priceTier:2, cuisine:["Snacks","Apperitivo"], score:2, notes:"Georgian wine bar", address:"R. do Salitre 122b, 1250-203 Lisboa"},
-  {name:"Os Tibetanos", lat:38.719741, lng:-9.148729, price:"Normal", priceTier:2, cuisine:["Curries","Noodles","Steaks","Tibetan cuisine"], score:4, notes:"", address:"R. do Salitre 117, 1250-198 Lisboa"},
-  {name:"Hygge Café", lat:38.731541, lng:-9.149072, price:"Cheap", priceTier:1, cuisine:["Brunch","Wraps","Pancakes"], score:3, notes:"", address:"R. Tomás Ribeiro 95B, 1050-227 Lisboa"},
-  {name:"A Minha Avó", lat:38.731104, lng:-9.150981, price:"Normal", priceTier:2, cuisine:["Portuguese food","Steaks","Seafood","Sandwiches","Desserts"], score:5, notes:"", address:"Av. António Augusto de Aguiar 74B, 1050-016 Lisboa"},
-  {name:"O Gambuzino", lat:38.721684, lng:-9.134817, price:"Pricey", priceTier:3, cuisine:["Fancier food"], score:5, notes:"Tasting menu available", address:"Rua dos Anjos 5A, 1150-032 Lisboa"},
-  {name:"Vegan Sushi House", lat:38.744340, lng:-9.178845, price:"Pricey", priceTier:3, cuisine:["Sushi","Asian starters","Poke bowl"], score:5, notes:"", address:"Estr. de Benfica 331A, 1500-075 Lisboa"},
-  {name:"Vegan Junkies", lat:38.724582, lng:-9.143543, price:"Normal", priceTier:2, cuisine:["Burgers","Desserts"], score:5, notes:"", address:"R. Luciano Cordeiro 28, 1150-300 Lisboa"},
-  {name:"Santa Marta", lat:38.725335, lng:-9.147057, price:"Normal", priceTier:2, cuisine:["Pizza"], score:1, notes:"Close to hotel; for a lazy day", address:"R. de Santa Marta 61, 1150-294 Lisboa"},
-  {name:"Tre Bambu", lat:38.719739, lng:-9.146331, price:"Normal", priceTier:2, cuisine:["Asian food"], score:3, notes:"Nice outdoor area; close to hotel", address:"R. do Salitre 38, 1250-144 Lisboa"},
-  {name:"Al Sanpietrino Trattoria", lat:38.712434, lng:-9.125964, price:"Normal", priceTier:2, cuisine:["Italian food","Pasta","Seafood","Lasagna"], score:5, notes:"", address:"Beco da Lapa 31, 1100-331 Lisboa"},
-  {name:"Atelier AK", lat:38.721964, lng:-9.145210, price:"Cheap", priceTier:1, cuisine:["Desserts","Croissants"], score:2, notes:"", address:"R. de Santa Marta 19B, 1150-299 Lisboa"},
-  {name:"The Food Temple", lat:38.715899, lng:-9.134262, price:"Normal", priceTier:2, cuisine:["Focaccia","Italian food","Tacos"], score:5, notes:"Tasting menu available", address:"Beco do Jasmim 18, 1100-289 Lisboa"}
+  {type:"restaurant", name:"Veganeats Caffe", lat:38.731640, lng:-9.133324, price:"Very cheap", priceTier:1, cuisine:["Breakfast","Lunch","Sandwiches","Sausages"], score:5, notes:"No dinner", address:"R. Cavaleiro de Oliveira 42, 1170-088 Lisboa"},
+  {type:"restaurant", name:"The Green Affair Saldanha", lat:38.735315, lng:-9.144518, price:"Normal", priceTier:2, cuisine:["Burgers","Bowls","Pasta","Ribs"], score:5, notes:"", address:"Av. Duque de Ávila 30 A, 1000-141 Lisboa"},
+  {type:"restaurant", name:"O Jardim da Jujé", lat:38.730745, lng:-9.140177, price:"Cheap", priceTier:1, cuisine:["Breakfast","Coffee","Smoothie","Quiche","Pastry"], score:5, notes:"No dinner", address:"R. Alexandre Braga 26C, 1150-004 Lisboa"},
+  {type:"restaurant", name:"Gal Café", lat:38.725950, lng:-9.134076, price:"Cheap", priceTier:1, cuisine:["Breakfast","Tofu scramble","Banoffee cake","Sandwiches","Burgers"], score:5, notes:"No dinner", address:"Rua do Forno do Tijolo 54A, 1170-172 Lisboa"},
+  {type:"restaurant", name:"Moko Vegan Bakery", lat:38.734258, lng:-9.150820, price:"Very cheap", priceTier:1, cuisine:["Pastry","Empanadas","Sandwich"], score:5, notes:"No dinner", address:"R. Pinheiro Chagas 69B, 1050-137 Lisboa"},
+  {type:"restaurant", name:"Alfarroba", lat:38.731695, lng:-9.148818, price:"Cheap", priceTier:1, cuisine:["Burger","Cakes","Dish of the day"], score:3, notes:"No dinner", address:"R. Tomás Ribeiro 28, 1050-227 Lisboa"},
+  {type:"restaurant", name:"Legumi Sushi Vegan", lat:38.708631, lng:-9.155649, price:"Expensive", priceTier:4, cuisine:["Sushi","Asian starters","Asian food"], score:5, notes:"", address:"R. Vicente Borga 75, 1200-863 Lisboa"},
+  {type:"restaurant", name:"Honest Greens", lat:38.710221, lng:-9.140397, price:"Cheap", priceTier:1, cuisine:["Toast","Bowls","Desserts","Protein bowls","Plates"], score:3, notes:"Multiple locations around the city", address:"R. Ivens 44, 1200-445 Lisboa"},
+  {type:"restaurant", name:"Kong — food made with compassion", lat:38.707424, lng:-9.142361, price:"Normal–Pricey", priceTier:3, cuisine:["Seafood","Portuguese food"], score:5, notes:"Looks very nice; a bit fancy", address:"Rua do Corpo Santo 2, 1200-129 Lisboa"},
+  {type:"restaurant", name:"Ao 26", lat:38.710231, lng:-9.143997, price:"Normal–Pricey", priceTier:3, cuisine:["Portuguese food","Fish","Steak"], score:5, notes:"Looks very nice", address:"R. da Horta Seca 5, 1200-213 Lisboa"},
+  {type:"restaurant", name:"Vegan Nata Chiado", lat:38.711055, lng:-9.143043, price:"Very cheap", priceTier:1, cuisine:["Pastel de nata","Portuguese food"], score:5, notes:"", address:"R. da Misericórdia 9, 1200-208 Lisboa"},
+  {type:"restaurant", name:"Organi Chiado", lat:38.710297, lng:-9.139716, price:"Normal", priceTier:2, cuisine:["Burger","Pasta","Lasagna","Chana masala","Vegan cheese cuts","Nachos"], score:5, notes:"They have everything", address:"Calçada Nova de São Francisco 2, 1200-300 Lisboa"},
+  {type:"restaurant", name:"The Botanical Den", lat:38.713318, lng:-9.145168, price:"Normal", priceTier:2, cuisine:["Hot dogs","Burgers"], score:5, notes:"Cocktail bar with food", address:"R. da Atalaia 153, 1200-039 Lisboa"},
+  {type:"restaurant", name:"Vegan Buffet", lat:38.711446, lng:-9.140309, price:"Normal", priceTier:2, cuisine:["Buffet"], score:5, notes:"All-you-can-eat, they have everything", address:"Calçada do Sacramento 36, 1200-394 Lisboa"},
+  {type:"restaurant", name:"Plant Base", lat:38.712449, lng:-9.141519, price:"Normal", priceTier:2, cuisine:["Pizza","Burgers","Nachos","Mac n cheese"], score:5, notes:"", address:"R. da Oliveira ao Carmo 9, 1200-307 Lisboa"},
+  {type:"restaurant", name:"If If If", lat:38.719950, lng:-9.151112, price:"Normal", priceTier:2, cuisine:["Snacks","Apperitivo"], score:2, notes:"Georgian wine bar", address:"R. do Salitre 122b, 1250-203 Lisboa"},
+  {type:"restaurant", name:"Os Tibetanos", lat:38.719741, lng:-9.148729, price:"Normal", priceTier:2, cuisine:["Curries","Noodles","Steaks","Tibetan cuisine"], score:4, notes:"", address:"R. do Salitre 117, 1250-198 Lisboa"},
+  {type:"restaurant", name:"Hygge Café", lat:38.731541, lng:-9.149072, price:"Cheap", priceTier:1, cuisine:["Brunch","Wraps","Pancakes"], score:3, notes:"", address:"R. Tomás Ribeiro 95B, 1050-227 Lisboa"},
+  {type:"restaurant", name:"A Minha Avó", lat:38.731104, lng:-9.150981, price:"Normal", priceTier:2, cuisine:["Portuguese food","Steaks","Seafood","Sandwiches","Desserts"], score:5, notes:"", address:"Av. António Augusto de Aguiar 74B, 1050-016 Lisboa"},
+  {type:"restaurant", name:"O Gambuzino", lat:38.721684, lng:-9.134817, price:"Pricey", priceTier:3, cuisine:["Fancier food"], score:5, notes:"Tasting menu available", address:"Rua dos Anjos 5A, 1150-032 Lisboa"},
+  {type:"restaurant", name:"Vegan Sushi House", lat:38.744340, lng:-9.178845, price:"Pricey", priceTier:3, cuisine:["Sushi","Asian starters","Poke bowl"], score:5, notes:"", address:"Estr. de Benfica 331A, 1500-075 Lisboa"},
+  {type:"restaurant", name:"Vegan Junkies", lat:38.724582, lng:-9.143543, price:"Normal", priceTier:2, cuisine:["Burgers","Desserts"], score:5, notes:"", address:"R. Luciano Cordeiro 28, 1150-300 Lisboa"},
+  {type:"restaurant", name:"Santa Marta", lat:38.725335, lng:-9.147057, price:"Normal", priceTier:2, cuisine:["Pizza"], score:1, notes:"Close to hotel; for a lazy day", address:"R. de Santa Marta 61, 1150-294 Lisboa"},
+  {type:"restaurant", name:"Tre Bambu", lat:38.719739, lng:-9.146331, price:"Normal", priceTier:2, cuisine:["Asian food"], score:3, notes:"Nice outdoor area; close to hotel", address:"R. do Salitre 38, 1250-144 Lisboa"},
+  {type:"restaurant", name:"Al Sanpietrino Trattoria", lat:38.712434, lng:-9.125964, price:"Normal", priceTier:2, cuisine:["Italian food","Pasta","Seafood","Lasagna"], score:5, notes:"", address:"Beco da Lapa 31, 1100-331 Lisboa"},
+  {type:"restaurant", name:"Atelier AK", lat:38.721964, lng:-9.145210, price:"Cheap", priceTier:1, cuisine:["Desserts","Croissants"], score:2, notes:"", address:"R. de Santa Marta 19B, 1150-299 Lisboa"},
+  {type:"restaurant", name:"The Food Temple", lat:38.715899, lng:-9.134262, price:"Normal", priceTier:2, cuisine:["Focaccia","Italian food","Tacos"], score:5, notes:"Tasting menu available", address:"Beco do Jasmim 18, 1100-289 Lisboa"},
+
+  // newly added restaurants
+  {type:"restaurant", name:"Casa da Mully", lat:38.748008, lng:-9.139540, price:"Cheap", priceTier:1, cuisine:["Flat bread","Sandwiches","Ice cream"], score:4, notes:"", address:"R. Dr. Gama Barros 17 A/B, 1700-265 Lisboa"},
+  {type:"restaurant", name:"Bone Free", lat:38.638205, lng:-9.233318, price:"Normal", priceTier:2, cuisine:["Sausages","Burgers","Pasta","Asian food","Nachos"], score:5, notes:"Costa de Caparica — a bit further out", address:"R. Eng. Henrique Mêndia 28A, 2825-450 Costa de Caparica"},
+  {type:"restaurant", name:"Lisbon Vegan Restaurante", lat:38.731169, lng:-9.136483, price:"Very cheap", priceTier:1, cuisine:["Buffet"], score:5, notes:"Buffet", address:"Rua de Arroios 177, 1150-053 Lisboa"},
+  {type:"restaurant", name:"Green Beans, Mercado", lat:38.710698, lng:-9.149946, price:"Cheap", priceTier:1, cuisine:["Pizza","Sandwiches","Pastry","Toasts","Burgers","Desserts"], score:5, notes:"", address:"R. do Poço dos Negros 15, 1200-335 Lisboa"},
+
+  // ice cream spots
+  {type:"ice_cream", name:"Sorbettino", lat:38.711168, lng:-9.143045, price:"Cheap", priceTier:1, cuisine:["Ice cream"], score:3, notes:"", address:"R. da Misericórdia 23, 1200-108 Lisboa"},
+  {type:"ice_cream", name:"Aroma Gelato Lisbon", lat:38.710736, lng:-9.144278, price:"Cheap", priceTier:1, cuisine:["Ice cream"], score:3, notes:"", address:"Rua do Loreto 18, 1200-086 Lisboa"},
+  {type:"ice_cream", name:"Il Gelatone Sé", lat:38.710066, lng:-9.134577, price:"Cheap", priceTier:1, cuisine:["Ice cream"], score:3, notes:"", address:"R. de Santo António da Sé 1, 1100-500 Lisboa"},
+  {type:"ice_cream", name:"Giola Gelato", lat:38.714951, lng:-9.151283, price:"Cheap", priceTier:1, cuisine:["Ice cream"], score:3, notes:"", address:"Praça das Flores 5, 1200-192 Lisboa"},
+  {type:"ice_cream", name:"UAO — Vegan & Sugar-Free Italian Gelato", lat:38.716012, lng:-9.147632, price:"Cheap", priceTier:1, cuisine:["Ice cream"], score:5, notes:"Sugar-free options too", address:"R. Dom Pedro V 145, 1250-094 Lisboa"}
 ];
 
 const SCORE_META = {
@@ -393,11 +411,17 @@ const SCORE_META = {
 
 const PRICE_ORDER = ["Very cheap","Cheap","Normal","Normal–Pricey","Pricey","Expensive"];
 
+const TYPE_META = {
+  restaurant:{label:"Restaurants", icon:"🍽️"},
+  ice_cream:{label:"Ice cream", icon:"🍦"}
+};
+
 /* ============================================================
    STATE
    ============================================================ */
 let activeScores = new Set([1,2,3,4,5]);
 let activePriceTiers = new Set([1,2,3,4]);
+let activeTypes = new Set(["restaurant","ice_cream"]);
 let searchTerm = "";
 let markers = {};
 let selectedName = null;
@@ -412,20 +436,23 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r
   attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
 }).addTo(map);
 
-function makeIcon(score, isSelected){
+function makeIcon(score, isSelected, type){
   const color = SCORE_META[score].color;
   const size = isSelected ? 30 : 22;
+  const isIceCream = type === "ice_cream";
+  const shape = isIceCream ? "28%" : "50%";
+  const content = isIceCream ? "🍦" : score;
   return L.divIcon({
     className: '',
     html: `<div style="
-      width:${size}px;height:${size}px;border-radius:50%;
+      width:${size}px;height:${size}px;border-radius:${shape};
       background:${color};
       border:2.5px solid #fff;
       box-shadow:0 2px 6px rgba(0,0,0,.35);
       display:flex;align-items:center;justify-content:center;
-      font-family:'DM Sans',sans-serif;font-weight:700;color:#fff;font-size:${isSelected?12:10}px;
+      font-family:'DM Sans',sans-serif;font-weight:700;color:#fff;font-size:${isIceCream ? (isSelected?13:11) : (isSelected?12:10)}px;
       transition:all .15s ease;
-    ">${score}</div>`,
+    ">${content}</div>`,
     iconSize:[size,size],
     iconAnchor:[size/2,size/2],
     popupAnchor:[0,-size/2]
@@ -438,11 +465,12 @@ function gmapLink(p){
 }
 
 PLACES.forEach(p => {
-  const marker = L.marker([p.lat, p.lng], { icon: makeIcon(p.score,false) });
+  const marker = L.marker([p.lat, p.lng], { icon: makeIcon(p.score,false,p.type) });
   marker.bindPopup(`
     <div class="popup">
       <span class="badge" style="background:${SCORE_META[p.score].color}">${p.score}/5 · ${SCORE_META[p.score].label}</span>
-      <h3>${p.name}</h3>
+      <h3>${TYPE_META[p.type].icon} ${p.name}</h3>
+      <div class="row"><b>Type:</b> ${TYPE_META[p.type].label.replace(/s$/,'')}</div>
       <div class="row"><b>Price:</b> ${p.price}</div>
       <div class="row"><b>Food:</b> ${p.cuisine.join(", ")}</div>
       ${p.notes ? `<div class="row notes">${p.notes}</div>` : ""}
@@ -476,6 +504,22 @@ const legendEl = document.getElementById('score-legend');
   legendEl.appendChild(row);
 });
 
+document.getElementById('total-count').textContent = PLACES.length;
+
+const typeChipsEl = document.getElementById('type-chips');
+["restaurant","ice_cream"].forEach(type => {
+  const count = PLACES.filter(p => p.type === type).length;
+  const chip = document.createElement('button');
+  chip.className = 'chip active';
+  chip.textContent = `${TYPE_META[type].icon} ${TYPE_META[type].label} (${count})`;
+  chip.addEventListener('click', () => {
+    if (activeTypes.has(type)) { activeTypes.delete(type); chip.classList.remove('active'); }
+    else { activeTypes.add(type); chip.classList.add('active'); }
+    applyFilters();
+  });
+  typeChipsEl.appendChild(chip);
+});
+
 const priceChipsEl = document.getElementById('price-chips');
 const tierLabels = {1:"Cheap", 2:"Normal", 3:"Pricey", 4:"Expensive"};
 [1,2,3,4].forEach(tier => {
@@ -493,6 +537,7 @@ const tierLabels = {1:"Cheap", 2:"Normal", 3:"Pricey", 4:"Expensive"};
 document.getElementById('reset-btn').addEventListener('click', () => {
   activeScores = new Set([1,2,3,4,5]);
   activePriceTiers = new Set([1,2,3,4]);
+  activeTypes = new Set(["restaurant","ice_cream"]);
   searchTerm = "";
   document.getElementById('search').value = "";
   document.querySelectorAll('.score-row').forEach(r => r.classList.remove('off'));
@@ -512,7 +557,7 @@ PLACES.forEach(p => {
   card.dataset.name = p.name;
   card.style.borderLeftColor = SCORE_META[p.score].color;
   card.innerHTML = `
-    <p class="place-name">${p.name}</p>
+    <p class="place-name">${TYPE_META[p.type].icon} ${p.name}</p>
     <div class="place-meta">
       <span class="price-tag">${p.price}</span>
       <span>· ${p.cuisine.slice(0,2).join(", ")}</span>
@@ -528,7 +573,7 @@ function selectPlace(name, flyTo){
     c.classList.toggle('selected', c.dataset.name === name);
   });
   const p = PLACES.find(x => x.name === name);
-  Object.entries(markers).forEach(([n, m]) => m.setIcon(makeIcon(PLACES.find(x=>x.name===n).score, n===name)));
+  Object.entries(markers).forEach(([n, m]) => { const pl = PLACES.find(x=>x.name===n); m.setIcon(makeIcon(pl.score, n===name, pl.type)); });
   if (flyTo) {
     map.flyTo([p.lat, p.lng], 16, { duration: 0.6 });
     markers[name].openPopup();
@@ -540,10 +585,11 @@ function applyFilters(){
   PLACES.forEach(p => {
     const matchesScore = activeScores.has(p.score);
     const matchesPrice = activePriceTiers.has(p.priceTier);
+    const matchesType = activeTypes.has(p.type);
     const matchesSearch = !searchTerm ||
       p.name.toLowerCase().includes(searchTerm) ||
       p.cuisine.join(" ").toLowerCase().includes(searchTerm);
-    const show = matchesScore && matchesPrice && matchesSearch;
+    const show = matchesScore && matchesPrice && matchesType && matchesSearch;
 
     const marker = markers[p.name];
     if (show) { if(!map.hasLayer(marker)) marker.addTo(map); visible++; }
