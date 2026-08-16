@@ -100,7 +100,62 @@
     padding:18px 26px;
     border-bottom:1px solid var(--line);
     overflow-y:auto;
+    max-height:40vh;
+    flex:0 0 auto;
   }
+
+  .filters-toggle{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    width:100%;
+    background:none;
+    border:none;
+    padding:0 0 4px;
+    cursor:pointer;
+    font-family:'DM Sans', sans-serif;
+  }
+  .filters-toggle .group-title{ margin:0; }
+  .filters-toggle .chevron{
+    font-size:11px;
+    color:var(--forest);
+    transition:transform .18s ease;
+  }
+  .filters-toggle.collapsed .chevron{ transform:rotate(-90deg); }
+
+  .tag-cloud{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    max-height:150px;
+    overflow-y:auto;
+    padding:2px 2px 4px;
+    margin-top:2px;
+  }
+  .tag-cloud::-webkit-scrollbar{ width:6px; }
+  .tag-cloud::-webkit-scrollbar-thumb{ background:var(--line); border-radius:4px; }
+
+  .tag-chip{
+    padding:5px 10px;
+    border-radius:16px;
+    border:1px solid var(--line);
+    background:#fff;
+    font-size:11.5px;
+    cursor:pointer;
+    color:#5b5346;
+    white-space:nowrap;
+    transition:all .15s ease;
+  }
+  .tag-chip .n{
+    color:#a89d87;
+    font-variant-numeric: tabular-nums;
+  }
+  .tag-chip.active{
+    background:var(--terracotta);
+    border-color:var(--terracotta);
+    color:#fff;
+  }
+  .tag-chip.active .n{ color:rgba(255,255,255,.75); }
 
   .search-wrap{
     position:relative;
@@ -342,6 +397,14 @@
         <div class="chip-row" id="price-chips"></div>
       </div>
 
+      <div class="group">
+        <button class="filters-toggle" id="tags-toggle">
+          <span class="group-title">Food &amp; drinks <span id="tags-active-count"></span></span>
+          <span class="chevron">▾</span>
+        </button>
+        <div class="tag-cloud" id="tag-cloud"></div>
+      </div>
+
       <button class="reset-link" id="reset-btn">Reset filters</button>
     </div>
 
@@ -363,14 +426,14 @@ const PLACES = [
   {type:"restaurant", name:"The Green Affair Saldanha", lat:38.735315, lng:-9.144518, price:"Normal", priceTier:2, cuisine:["Burgers","Bowls","Pasta","Ribs"], score:5, notes:"", address:"Av. Duque de Ávila 30 A, 1000-141 Lisboa"},
   {type:"restaurant", name:"O Jardim da Jujé", lat:38.730745, lng:-9.140177, price:"Cheap", priceTier:1, cuisine:["Breakfast","Coffee","Smoothie","Quiche","Pastry"], score:5, notes:"No dinner", address:"R. Alexandre Braga 26C, 1150-004 Lisboa"},
   {type:"restaurant", name:"Gal Café", lat:38.725950, lng:-9.134076, price:"Cheap", priceTier:1, cuisine:["Breakfast","Tofu scramble","Banoffee cake","Sandwiches","Burgers"], score:5, notes:"No dinner", address:"Rua do Forno do Tijolo 54A, 1170-172 Lisboa"},
-  {type:"restaurant", name:"Moko Vegan Bakery", lat:38.734258, lng:-9.150820, price:"Very cheap", priceTier:1, cuisine:["Pastry","Empanadas","Sandwich"], score:5, notes:"No dinner", address:"R. Pinheiro Chagas 69B, 1050-137 Lisboa"},
-  {type:"restaurant", name:"Alfarroba", lat:38.731695, lng:-9.148818, price:"Cheap", priceTier:1, cuisine:["Burger","Cakes","Dish of the day"], score:3, notes:"No dinner", address:"R. Tomás Ribeiro 28, 1050-227 Lisboa"},
+  {type:"restaurant", name:"Moko Vegan Bakery", lat:38.734258, lng:-9.150820, price:"Very cheap", priceTier:1, cuisine:["Pastry","Empanadas","Sandwiches"], score:5, notes:"No dinner", address:"R. Pinheiro Chagas 69B, 1050-137 Lisboa"},
+  {type:"restaurant", name:"Alfarroba", lat:38.731695, lng:-9.148818, price:"Cheap", priceTier:1, cuisine:["Burgers","Cakes","Dish of the day"], score:3, notes:"No dinner", address:"R. Tomás Ribeiro 28, 1050-227 Lisboa"},
   {type:"restaurant", name:"Legumi Sushi Vegan", lat:38.708631, lng:-9.155649, price:"Expensive", priceTier:4, cuisine:["Sushi","Asian starters","Asian food"], score:5, notes:"", address:"R. Vicente Borga 75, 1200-863 Lisboa"},
-  {type:"restaurant", name:"Honest Greens", lat:38.710221, lng:-9.140397, price:"Cheap", priceTier:1, cuisine:["Toast","Bowls","Desserts","Protein bowls","Plates"], score:3, notes:"Multiple locations around the city", address:"R. Ivens 44, 1200-445 Lisboa"},
+  {type:"restaurant", name:"Honest Greens", lat:38.710221, lng:-9.140397, price:"Cheap", priceTier:1, cuisine:["Toasts","Bowls","Desserts","Protein bowls","Plates"], score:3, notes:"Multiple locations around the city", address:"R. Ivens 44, 1200-445 Lisboa"},
   {type:"restaurant", name:"Kong — food made with compassion", lat:38.707424, lng:-9.142361, price:"Normal–Pricey", priceTier:3, cuisine:["Seafood","Portuguese food"], score:5, notes:"Looks very nice; a bit fancy", address:"Rua do Corpo Santo 2, 1200-129 Lisboa"},
-  {type:"restaurant", name:"Ao 26", lat:38.710231, lng:-9.143997, price:"Normal–Pricey", priceTier:3, cuisine:["Portuguese food","Fish","Steak"], score:5, notes:"Looks very nice", address:"R. da Horta Seca 5, 1200-213 Lisboa"},
+  {type:"restaurant", name:"Ao 26", lat:38.710231, lng:-9.143997, price:"Normal–Pricey", priceTier:3, cuisine:["Portuguese food","Fish","Steaks"], score:5, notes:"Looks very nice", address:"R. da Horta Seca 5, 1200-213 Lisboa"},
   {type:"restaurant", name:"Vegan Nata Chiado", lat:38.711055, lng:-9.143043, price:"Very cheap", priceTier:1, cuisine:["Pastel de nata","Portuguese food"], score:5, notes:"", address:"R. da Misericórdia 9, 1200-208 Lisboa"},
-  {type:"restaurant", name:"Organi Chiado", lat:38.710297, lng:-9.139716, price:"Normal", priceTier:2, cuisine:["Burger","Pasta","Lasagna","Chana masala","Vegan cheese cuts","Nachos"], score:5, notes:"They have everything", address:"Calçada Nova de São Francisco 2, 1200-300 Lisboa"},
+  {type:"restaurant", name:"Organi Chiado", lat:38.710297, lng:-9.139716, price:"Normal", priceTier:2, cuisine:["Burgers","Pasta","Lasagna","Chana masala","Vegan cheese cuts","Nachos"], score:5, notes:"They have everything", address:"Calçada Nova de São Francisco 2, 1200-300 Lisboa"},
   {type:"restaurant", name:"The Botanical Den", lat:38.713318, lng:-9.145168, price:"Normal", priceTier:2, cuisine:["Hot dogs","Burgers"], score:5, notes:"Cocktail bar with food", address:"R. da Atalaia 153, 1200-039 Lisboa"},
   {type:"restaurant", name:"Vegan Buffet", lat:38.711446, lng:-9.140309, price:"Normal", priceTier:2, cuisine:["Buffet"], score:5, notes:"All-you-can-eat, they have everything", address:"Calçada do Sacramento 36, 1200-394 Lisboa"},
   {type:"restaurant", name:"Plant Base", lat:38.712449, lng:-9.141519, price:"Normal", priceTier:2, cuisine:["Pizza","Burgers","Nachos","Mac n cheese"], score:5, notes:"", address:"R. da Oliveira ao Carmo 9, 1200-307 Lisboa"},
@@ -422,6 +485,7 @@ const TYPE_META = {
 let activeScores = new Set([1,2,3,4,5]);
 let activePriceTiers = new Set([1,2,3,4]);
 let activeTypes = new Set(["restaurant","ice_cream"]);
+let activeCuisineTags = new Set();
 let searchTerm = "";
 let markers = {};
 let selectedName = null;
@@ -534,14 +598,53 @@ const tierLabels = {1:"Cheap", 2:"Normal", 3:"Pricey", 4:"Expensive"};
   priceChipsEl.appendChild(chip);
 });
 
+/* Food & drinks tag cloud — built from every cuisine tag across PLACES,
+   sorted by how many spots carry it, most common first. */
+const tagCounts = {};
+PLACES.forEach(p => p.cuisine.forEach(c => { tagCounts[c] = (tagCounts[c] || 0) + 1; }));
+const sortedTags = Object.keys(tagCounts).sort((a,b) => tagCounts[b] - tagCounts[a] || a.localeCompare(b));
+
+const tagCloudEl = document.getElementById('tag-cloud');
+const tagsActiveCountEl = document.getElementById('tags-active-count');
+const tagChipEls = {};
+sortedTags.forEach(tag => {
+  const chip = document.createElement('button');
+  chip.className = 'tag-chip';
+  chip.innerHTML = `${tag} <span class="n">${tagCounts[tag]}</span>`;
+  chip.addEventListener('click', () => {
+    if (activeCuisineTags.has(tag)) { activeCuisineTags.delete(tag); chip.classList.remove('active'); }
+    else { activeCuisineTags.add(tag); chip.classList.add('active'); }
+    updateTagsActiveCount();
+    applyFilters();
+  });
+  tagChipEls[tag] = chip;
+  tagCloudEl.appendChild(chip);
+});
+
+function updateTagsActiveCount(){
+  tagsActiveCountEl.textContent = activeCuisineTags.size ? `(${activeCuisineTags.size} selected)` : "";
+}
+
+const tagsToggle = document.getElementById('tags-toggle');
+tagsToggle.addEventListener('click', () => {
+  tagsToggle.classList.toggle('collapsed');
+  tagCloudEl.style.display = tagsToggle.classList.contains('collapsed') ? 'none' : 'flex';
+});
+// start collapsed so the list stays visible on load; expand on demand
+tagsToggle.classList.add('collapsed');
+tagCloudEl.style.display = 'none';
+
 document.getElementById('reset-btn').addEventListener('click', () => {
   activeScores = new Set([1,2,3,4,5]);
   activePriceTiers = new Set([1,2,3,4]);
   activeTypes = new Set(["restaurant","ice_cream"]);
+  activeCuisineTags = new Set();
   searchTerm = "";
   document.getElementById('search').value = "";
   document.querySelectorAll('.score-row').forEach(r => r.classList.remove('off'));
   document.querySelectorAll('.chip').forEach(c => c.classList.add('active'));
+  document.querySelectorAll('.tag-chip').forEach(c => c.classList.remove('active'));
+  updateTagsActiveCount();
   applyFilters();
 });
 
@@ -586,10 +689,12 @@ function applyFilters(){
     const matchesScore = activeScores.has(p.score);
     const matchesPrice = activePriceTiers.has(p.priceTier);
     const matchesType = activeTypes.has(p.type);
+    const matchesTags = activeCuisineTags.size === 0 ||
+      p.cuisine.some(c => activeCuisineTags.has(c));
     const matchesSearch = !searchTerm ||
       p.name.toLowerCase().includes(searchTerm) ||
       p.cuisine.join(" ").toLowerCase().includes(searchTerm);
-    const show = matchesScore && matchesPrice && matchesType && matchesSearch;
+    const show = matchesScore && matchesPrice && matchesType && matchesTags && matchesSearch;
 
     const marker = markers[p.name];
     if (show) { if(!map.hasLayer(marker)) marker.addTo(map); visible++; }
